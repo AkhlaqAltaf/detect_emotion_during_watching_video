@@ -12,8 +12,8 @@ class VideosList extends StatefulWidget {
 class _VideosListState extends State<VideosList> {
   var videos = [
     'assets/videos/Video1.mp4',
-    // 'assets/videos/Video2.mp4',
-    // 'assets/videos/Video3.mp4',
+    'assets/videos/Video2.mp4',
+    'assets/videos/Video3.mp4',
     // 'assets/videos/Video4.mp4',
     // 'assets/videos/Video5.mp4',
     // 'assets/videos/Video6.mp4',

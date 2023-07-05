@@ -58,7 +58,7 @@ class Landing extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Fake Feedback Recognisation',
+                          'Video Content Comparison With creator Tags',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),

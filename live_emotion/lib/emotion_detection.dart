@@ -21,6 +21,7 @@ class _HomeState extends State<EmotionDetector> {
   bool _isCamera = false;
   int _videoNumber = 0;
   var logger = Logger();
+  bool front = true;
   _HomeState(this._isCamera, this._videoNumber);
   CameraImage? cameraImage;
   CameraController? cameraController;
@@ -38,6 +39,8 @@ class _HomeState extends State<EmotionDetector> {
   @override
   void initState() {
     super.initState();
+
+    cameraController = CameraController(cameras![1], ResolutionPreset.high);
     loadCamera();
     loadmodel();
   }
@@ -50,7 +53,6 @@ class _HomeState extends State<EmotionDetector> {
   }
 
   loadCamera() {
-    cameraController = CameraController(cameras![0], ResolutionPreset.high);
     cameraController!.initialize().then((value) {
       if (!mounted) {
         return;
@@ -106,8 +108,9 @@ class _HomeState extends State<EmotionDetector> {
         ? Scaffold(
             body: Stack(
               children: [
-                _cameraPreview(),
+                Positioned.fill(child: _cameraPreview()),
                 _displayEmotion(),
+                _switchCameraButton(),
               ],
             ),
           )
@@ -144,5 +147,37 @@ class _HomeState extends State<EmotionDetector> {
       aspectRatio: cameraController!.value.aspectRatio,
       child: CameraPreview(cameraController!),
     );
+  }
+
+  Widget _switchCameraButton() {
+    IconData icon = _isCamera ? Icons.camera_rear : Icons.camera_front;
+    return Positioned(
+      top: 20,
+      right: 20,
+      child: FloatingActionButton(
+        onPressed: () {
+          _toggleCamera();
+        },
+        child: Icon(icon),
+      ),
+    );
+  }
+
+  void _toggleCamera() {
+    setState(() {
+      front = !front;
+      cameraController!.dispose();
+      if (front) {
+        cameraController = CameraController(cameras![1], ResolutionPreset.high);
+      } else {
+        cameraController = CameraController(cameras![0], ResolutionPreset.high);
+      }
+      cameraController!.initialize().then((_) {
+        cameraController!.startImageStream((imageStream) {
+          cameraImage = imageStream;
+          runModel();
+        });
+      });
+    });
   }
 }
